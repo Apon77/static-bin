@@ -23,7 +23,7 @@ case "$2" in
         URL="https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7+20260929-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz"
         
 	wget -q --show-progress "$URL" -O - | tar -xzC "$HOME/bin"
-        echo "Package extracted to ~/bin"
+        echo "Package extracted to ~/bin/python"
         ;;
 
     zsh)
@@ -39,8 +39,18 @@ case "$2" in
 
         # Download to stdout and untar into ~/bin (.tar.xz uses -xJ or auto-detects)
         wget -q --show-progress "$URL" -O - | tar -xJC "$HOME/bin" curl
-        echo "Curl package extracted to ~/bin"
+        echo "Curl package extracted to ~/bin/curl"
         ;;
+    ngrok)
+        echo "Downloading and extracting ngrok..."
+        URL="https://bin.ngrok.com/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz"
+
+        # Download to stdout and extract only the ngrok binary directly into ~/bin
+        wget -q --show-progress "$URL" -O - | tar -xzC "$HOME/bin" ngrok
+        echo "ngrok binary extracted directly to ~/bin/ngrok"
+        ;;
+
+
     *)
         echo "Unknown package: $2"
         echo "Available packages: vim, python, python3"
