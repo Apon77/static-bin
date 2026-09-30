@@ -25,7 +25,22 @@ case "$2" in
 	wget -q --show-progress "$URL" -O - | tar -xzC "$HOME/bin"
         echo "Package extracted to ~/bin"
         ;;
-        
+
+    zsh)
+        echo "Installing Zsh to $HOME..."
+        # Downloads the script and directly executes it passing your custom home directory flags
+        wget -qO- https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh -s -- -d "$HOME" -e no -q
+        echo "Zsh binaries are located at $HOME/bin/zsh"
+        ;;
+
+    curl)
+        echo "Downloading and extracting Static Curl package..."
+        URL="https://github.com/stunnel/static-curl/releases/download/8.22.0/curl-linux-x86_64-musl-8.22.0.tar.xz"
+
+        # Download to stdout and untar into ~/bin (.tar.xz uses -xJ or auto-detects)
+        wget -q --show-progress "$URL" -O - | tar -xJC "$HOME/bin" curl
+        echo "Curl package extracted to ~/bin"
+        ;;
     *)
         echo "Unknown package: $2"
         echo "Available packages: vim, python, python3"
