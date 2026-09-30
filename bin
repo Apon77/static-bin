@@ -1,41 +1,34 @@
 #!/usr/bin/env bash
 
-# Ensure ~/bin exists
 mkdir -p "$HOME/bin"
 
-# Check if the command is "i" (install)
 if [ "$1" != "i" ]; then
     echo "Usage: bin i [vim|curl]"
     exit 1
 fi
 
-# Handle the package argument
 case "$2" in
     vim)
         echo "Downloading Vim..."
         URL="https://github.com/heywoodlh/vim-builds/releases/download/9.2/vim-x86_64"
         TARGET="$HOME/bin/vim"
         
-        # Download and make executable
 	wget -q --show-progress "$URL" -O "$TARGET"
         chmod +x "$TARGET"
         echo "Vim installed to $TARGET"
         ;;
         
-    python)
+    python|python3)
         echo "Downloading and extracting Python standalone package..."
         URL="https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7+20260929-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz"
         
-        # Download and extract directly into ~/bin
-        # --strip-components=1 or 2 might be needed depending on how the tarball is structured internally.
-        # This extracts everything directly into ~/bin.
 	wget -q --show-progress "$URL" -O - | tar -xzC "$HOME/bin"
         echo "Package extracted to ~/bin"
         ;;
         
     *)
         echo "Unknown package: $2"
-        echo "Available packages: vim, curl"
+        echo "Available packages: vim, python, python3"
         exit 1
         ;;
 esac
