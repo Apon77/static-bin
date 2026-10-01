@@ -1,57 +1,17 @@
-#!/usr/bin/env bash
-
-mkdir -p "$HOME/bin"
-
-if [ "$1" != "i" ]; then
-    echo "Usage: bin i [vim|curl]"
-    exit 1
-fi
+#!/bin/bash
+D="$HOME/bin"; mkdir -p "$D"
 
 case "$2" in
-    vim)
-        echo "Downloading Vim..."
-        URL="https://github.com/heywoodlh/vim-builds/releases/download/9.2/vim-x86_64"
-        TARGET="$HOME/bin/vim"
-        
-	wget -q --show-progress "$URL" -O "$TARGET"
-        chmod +x "$TARGET"
-        echo "Vim installed to $TARGET"
-        ;;
-        
-    python|python3)
-        echo "Downloading and extracting Python standalone package..."
-        URL="https://github.com/astral-sh/python-build-standalone/releases/download/20260929/cpython-3.14.7+20260929-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz"
-        
-	wget -q --show-progress "$URL" -O - | tar -xzC "$HOME/bin"
-        echo "Package extracted to ~/bin/python"
-        ;;
+    vim)  P="vim.tar.gz" ; B="vim view xxd" ;;
+    curl) P="curl.tar.gz"; B="curl" ;;
+    *)    P="$2.tar.gz"  ; B="$2" ;;
+esac
 
-    zsh)
-        echo "Installing Zsh to $HOME..."
-        wget -qO- https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh -s -- -d "$HOME" -e no -q
-        echo "Zsh binaries are located at $HOME/bin/zsh"
-        ;;
-
-    curl)
-        echo "Downloading and extracting Static Curl package..."
-        URL="https://github.com/stunnel/static-curl/releases/download/8.22.0/curl-linux-x86_64-musl-8.22.0.tar.xz"
-
-        wget -q --show-progress "$URL" -O - | tar -xJC "$HOME/bin" curl
-        echo "Curl package extracted to ~/bin/curl"
-        ;;
-    ngrok)
-        echo "Downloading and extracting ngrok..."
-        URL="https://bin.ngrok.com/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz"
-
-        wget -q --show-progress "$URL" -O - | tar -xzC "$HOME/bin" ngrok
-        echo "ngrok binary extracted directly to ~/bin/ngrok"
-        ;;
-
-
-    *)
-        echo "Unknown package: $2"
-        echo "Available packages: vim, python, python3"
-        exit 1
-        ;;
+case "$1" in
+    i) [ -z "$2" ] && exit 1
+       wget -q --show-progress -O "$D/$P" "https://github.com/Apon77/static-bin/releases/download/v1.0.0/$2.tar.gz" && tar xzvf "$D/$P" -C "$D" && rm -f "$D/$P" ;;
+    r) [ -z "$2" ] && exit 1
+       for b in $B; do rm -f "$D/$b"; done ;;
+    *) echo "Usage: bin [i|r] [package]" && exit 1 ;;
 esac
 
