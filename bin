@@ -1,14 +1,33 @@
-#!/bin/bash
+#!/bin/sh
 D="$HOME/bin"; mkdir -p "$D"
-
-P="$2.tar.gz"
 U="https://github.com/Apon77/static-bin/releases/download/v1.0.0"
 
-case "$1" in
-    i) [ -z "$2" ] && exit 1
-       wget --no-check-certificate -q --show-progress -O "$D/$P" "$U/$P" && tar xzf "$D/$P" -C "$D" && rm -f "$D/$P" && echo Installed $2 at $D;;
-    r) [ -z "$2" ] && exit 1
-       rm -rf "$D/$2" && echo Removed $2 from $D;;
-    *) echo "Usage: bin [i|r] [package]" && exit 1 ;;
-esac
+# 1. Capture the action (i or r) and verify it is provided
+ACTION="${1:-}"
+[ -z "$ACTION" ] && echo "Usage: bin [i|r] [package1] [package2] ..." && exit 1
+
+# 2. Shift the arguments so that $@ contains only the package names
+shift
+
+# 3. Detect if wget supports --show-progress (BusyBox wget will fail this check)
+WGET_OPTS="--no-check-certificate -q"
+if wget --help 2>&1 | grep -q "show-progress"; then
+    WGET_OPTS="$WGET_OPTS --show-progress"
+fi
+
+# 4. Process every package passed in the command line
+for PKG in "$@"; do
+    P="${PKG}.tar.gz"
+    
+    case "$ACTION" in
+        i) echo "Downloading $PKG..."
+           wget $WGET_OPTS -O "$D/$P" "$U/$P" && \
+           tar xzf "$D/$P" -C "$D" && \
+           rm -f "$D/$P" && \
+           echo "Installed $PKG at $D" ;;
+        r) rm -rf "$D/$PKG" && \
+           echo "Removed $PKG from $D" ;;
+        *) echo "Usage: bin [i|r] [package1] [package2] ..." && exit 1 ;;
+    esac
+done
 
