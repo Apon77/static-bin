@@ -2,10 +2,11 @@
 D="$HOME/bin"; mkdir -p "$D"
 
 P="$2.tar.gz"
+U="https://github.com/Apon77/static-bin/releases/download/v1.0.0"
 
 case "$1" in
     i) [ -z "$2" ] && exit 1
-       wget --no-check-certificate -q --show-progress -O "$D/$P" "https://github.com/Apon77/static-bin/releases/download/v1.0.0/$2.tar.gz" && tar xzvf "$D/$P" -C "$D" && rm -f "$D/$P" && echo Installed $2 at $D;;
+       wget --no-check-certificate -q --show-progress -O "$D/$P" "$U/$P" && tar xzf "$D/$P" -C "$D" && rm -f "$D/$P" && echo Installed $2 at $D;;
     r) [ -z "$2" ] && exit 1
        rm -rf "$D/$2" && echo Removed $2 from $D;;
     *) echo "Usage: bin [i|r] [package]" && exit 1 ;;
