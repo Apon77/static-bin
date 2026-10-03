@@ -1,24 +1,17 @@
 #!/bin/sh
 D="$HOME/bin"; mkdir -p "$D"
 U="https://github.com/Apon77/static-bin/releases/download/v1.0.0"
-
-# 1. Capture the action (i or r) and verify it is provided
 ACTION="${1:-}"
-[ -z "$ACTION" ] && echo "Usage: bin [i|r] [package1] [package2] ..." && exit 1
+[ -z "$ACTION" ] && echo "Usage: bin [i|r|s] [package1] [package2] ..." && exit 1
 
-# 2. Shift the arguments so that $@ contains only the package names
 shift
 
-# 3. Detect if wget supports --show-progress (BusyBox wget will fail this check)
 WGET_OPTS="--no-check-certificate -q"
-if wget --help 2>&1 | grep -q "show-progress"; then
-    WGET_OPTS="$WGET_OPTS --show-progress"
-fi
+if wget --help 2>&1 | grep -q "show-progress"; then WGET_OPTS="$WGET_OPTS --show-progress"; fi
 
-# 4. Process every package passed in the command line
 for PKG in "$@"; do
     P="${PKG}.tar.gz"
-    
+
     case "$ACTION" in
         i) echo "Downloading $PKG..."
            wget $WGET_OPTS -O "$D/$P" "$U/$P" && \
@@ -27,7 +20,14 @@ for PKG in "$@"; do
            echo "Installed $PKG at $D" ;;
         r) rm -rf "$D/$PKG" && \
            echo "Removed $PKG from $D" ;;
-        *) echo "Usage: bin [i|r] [package1] [package2] ..." && exit 1 ;;
+        s) echo "Searching for $PKG..."
+           # --spider checks if the file exists on the server without downloading it
+           if wget --no-check-certificate --spider "$U/$P" 2>/dev/null; then
+               echo "✅ $PKG is AVAILABLE to install."
+           else
+               echo "❌ $PKG is NOT available."
+           fi ;;
+        *) echo "Usage: bin [i|r|s] [package1] [package2] ..." && exit 1 ;;
     esac
 done
 
