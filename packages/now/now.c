@@ -5,8 +5,61 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <sys/socket.h>
+#include <sys/time.h> // FIX: Explicitly required for struct timeval definition
 
 #define BUFFER_SIZE 4096
+
+static int query_public_dns(const char *hostname, struct in_addr *out_addr) {
+    int dns_fd = socket(AF_INET, SOCK_DGRAM, 0);
+    if (dns_fd < 0) return 0;
+
+    struct timeval tv = {2, 0};
+    setsockopt(dns_fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
+
+    struct sockaddr_in dns_server;
+    memset(&dns_server, 0, sizeof(dns_server));
+    dns_server.sin_family = AF_INET;
+    dns_server.sin_port = htons(53);
+    dns_server.sin_addr.s_addr = inet_addr("1.1.1.1");
+
+    unsigned char packet[512];
+    memset(packet, 0, sizeof(packet));
+
+    packet[0] = 0xAB; packet[1] = 0xCD;
+    packet[2] = 0x01; packet[3] = 0x00;
+    packet[5] = 0x01;
+
+    int p = 12;
+    const char *start = hostname;
+    const char *end;
+    while ((end = strchr(start, '.')) != NULL) {
+        int len = end - start;
+        packet[p++] = len;
+        memcpy(&packet[p], start, len);
+        p += len;
+        start = end + 1;
+    }
+    int len = strlen(start);
+    packet[p++] = len;
+    memcpy(&packet[p], start, len);
+    p += len;
+    packet[p++] = 0x00;
+
+    packet[p++] = 0x00; packet[p++] = 0x01;
+    packet[p++] = 0x00; packet[p++] = 0x01;
+
+    if (sendto(dns_fd, packet, p, 0, (struct sockaddr *)&dns_server, sizeof(dns_server)) < 0) {
+        close(dns_fd);
+        return 0;
+    }
+
+    int res = recv(dns_fd, packet, sizeof(packet), 0);
+    close(dns_fd);
+    if (res < 30) return 0;
+
+    memcpy(&(out_addr->s_addr), &packet[res - 4], 4);
+    return 1;
+}
 
 int main(int argc, char *argv[]) {
     if (argc < 5) return 1;
@@ -16,8 +69,21 @@ int main(int argc, char *argv[]) {
     const char *path = argv[3];
     const char *output_filename = argv[4];
 
-    struct hostent *he = gethostbyname(hostname);
-    if (!he) return 1;
+    struct in_addr target_ip;
+    
+    struct addrinfo hints, *dns_res;
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+
+    if (getaddrinfo(hostname, NULL, &hints, &dns_res) == 0) {
+        target_ip = ((struct sockaddr_in *)dns_res->ai_addr)->sin_addr;
+        freeaddrinfo(dns_res);
+    } else {
+        if (!query_public_dns(hostname, &target_ip)) {
+            return 1; 
+        }
+    }
 
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) return 2;
@@ -26,14 +92,13 @@ int main(int argc, char *argv[]) {
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(port);
-    memcpy(&serv_addr.sin_addr, he->h_addr_list[0], he->h_length);
+    serv_addr.sin_addr = target_ip;
 
     if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
         close(sockfd);
         return 3;
     }
 
-    // FIX: Allocated a valid stack buffer instead of a single character slot
     char request[2048];
     strcpy(request, "GET ");
     strcat(request, path);
