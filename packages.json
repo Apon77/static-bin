@@ -1,0 +1,219 @@
+[
+  {
+    "package": "ag",
+    "version": "2.2.0+git20200805-1.2",
+    "arch": "amd64",
+    "summary": "The Silver Searcher. Like ack, but faster"
+  },
+  {
+    "package": "aria2",
+    "version": "1.37.0+debian-1build3",
+    "arch": "amd64",
+    "summary": "High speed download utility"
+  },
+  {
+    "package": "bash",
+    "version": "5.2.21-2ubuntu4",
+    "arch": "amd64",
+    "summary": "GNU Bourne Again SHell"
+  },
+  {
+    "package": "busybox",
+    "version": "1:1.36.1-6ubuntu3",
+    "arch": "amd64",
+    "summary": "Tiny utilities for small and embedded systems"
+  },
+  {
+    "package": "ccache",
+    "version": "4.9.1-1",
+    "arch": "amd64",
+    "summary": "Compiler driver cache for fast recompilation"
+  },
+  {
+    "package": "coreutils",
+    "version": "9.4-3ubuntu1",
+    "arch": "amd64",
+    "summary": "GNU core utilities (basic file, shell and text utilities)"
+  },
+  {
+    "package": "curl",
+    "version": "8.5.0-2ubuntu10",
+    "arch": "amd64",
+    "summary": "Command line tool for transferring data with URLs"
+  },
+  {
+    "package": "dash",
+    "version": "0.5.12-6ubuntu5",
+    "arch": "amd64",
+    "summary": "POSIX-compliant fast lightweight shell"
+  },
+  {
+    "package": "dropbearmulti",
+    "version": "2022.83-4",
+    "arch": "amd64",
+    "summary": "Lightweight multi-command SSH2 server and client binary"
+  },
+  {
+    "package": "jq",
+    "version": "1.7.1-3build1",
+    "arch": "amd64",
+    "summary": "Lightweight and flexible command-line JSON processor"
+  },
+  {
+    "package": "less",
+    "version": "633-1",
+    "arch": "amd64",
+    "summary": "Pager program similar to more, but with backward navigation"
+  },
+  {
+    "package": "links",
+    "version": "2.29-1",
+    "arch": "amd64",
+    "summary": "Web browser running in text mode"
+  },
+  {
+    "package": "make",
+    "version": "4.3-4.1build2",
+    "arch": "amd64",
+    "summary": "Utility for directing compilation"
+  },
+  {
+    "package": "mk",
+    "version": "1.3-1",
+    "arch": "amd64",
+    "summary": "Shell script generator for making files"
+  },
+  {
+    "package": "nc",
+    "version": "1.226-1ubuntu2",
+    "arch": "amd64",
+    "summary": "TCP/IP swiss army knife (netcat-openbsd)"
+  },
+  {
+    "package": "neovim",
+    "version": "0.9.5-3",
+    "arch": "amd64",
+    "summary": "Heavily refactored and extensible Vim-text editor"
+  },
+  {
+    "package": "ngrok",
+    "version": "3.3.0",
+    "arch": "amd64",
+    "summary": "Reverse proxy that creates secure tunnels to local ports"
+  },
+  {
+    "package": "openssh-client",
+    "version": "1:9.6p1-3ubuntu13",
+    "arch": "amd64",
+    "summary": "Secure shell (SSH) client, for secure access to remote machines"
+  },
+  {
+    "package": "pv",
+    "version": "1.8.5-1",
+    "arch": "amd64",
+    "summary": "Shell pipeline element to monitor data progress"
+  },
+  {
+    "package": "python",
+    "version": "3.12.3-0ubuntu1",
+    "arch": "amd64",
+    "summary": "Interactive high-level object-oriented language"
+  },
+  {
+    "package": "rc",
+    "version": "1.7.4-2",
+    "arch": "amd64",
+    "summary": "Implementation of the Plan 9 system shell"
+  },
+  {
+    "package": "rsync",
+    "version": "3.2.7-1ubuntu1",
+    "arch": "amd64",
+    "summary": "Fast, versatile, remote (and local) file-copying tool"
+  },
+  {
+    "package": "screen",
+    "version": "4.9.1-1",
+    "arch": "amd64",
+    "summary": "Terminal multiplexer with VT100/ANSI terminal emulation"
+  },
+  {
+    "package": "socat",
+    "version": "1.8.0.0-1",
+    "arch": "amd64",
+    "summary": "Multipurpose relay for bidirectional data transfer"
+  },
+  {
+    "package": "sslh",
+    "version": "1.22c-1",
+    "arch": "amd64",
+    "summary": "Applicative protocol multiplexer (SSH/HTTPS sharing port)"
+  },
+  {
+    "package": "stunnel",
+    "version": "5.72-1build2",
+    "arch": "amd64",
+    "summary": "Universal SSL/TLS tunnel wrapper for network daemons"
+  },
+  {
+    "package": "tailscale",
+    "version": "1.64.0",
+    "arch": "amd64",
+    "summary": "Zero config VPN that installs on any device in minutes"
+  },
+  {
+    "package": "tini",
+    "version": "0.19.0-1",
+    "arch": "amd64",
+    "summary": "Tiny but valid init for containers"
+  },
+  {
+    "package": "tmux",
+    "version": "3.4-1build1",
+    "arch": "amd64",
+    "summary": "Terminal multiplexer workspace manager"
+  },
+  {
+    "package": "toybox",
+    "version": "0.8.10+dfsg-1",
+    "arch": "amd64",
+    "summary": "All-in-one command line alternative to GNU coreutils"
+  },
+  {
+    "package": "unrar",
+    "version": "1:7.0.7-1",
+    "arch": "amd64",
+    "summary": "Unarchiver for .rar files (non-free version)"
+  },
+  {
+    "package": "vim",
+    "version": "2:9.1.0016-1ubuntu7",
+    "arch": "amd64",
+    "summary": "Vi IMproved - enhanced vi editor"
+  },
+  {
+    "package": "xml",
+    "version": "1.6.2-4",
+    "arch": "amd64",
+    "summary": "XML command line utilities (xmlstarlet)"
+  },
+  {
+    "package": "xz",
+    "version": "5.6.1-1",
+    "arch": "amd64",
+    "summary": "XZ-format compression utilities"
+  },
+  {
+    "package": "zsh-5.9-static-x86_64-HOME-bin",
+    "version": "5.9",
+    "arch": "amd64",
+    "summary": "Static standalone build of Z shell for home directory installation"
+  },
+  {
+    "package": "zsh",
+    "version": "5.8",
+    "arch": "amd64",
+    "summary": "Programmable terminal shell with advanced features"
+  }
+]
+
