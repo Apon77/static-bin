@@ -20,39 +20,30 @@ for PKG in "$@"; do
            echo "Installed $PKG at $D" ;;
         r) rm -rf "$D/$PKG" && \
            echo "Removed $PKG from $D" ;;
+
         s)
-    # Check if $2 exists; if shift was used earlier, look at $1 instead.
     if [ -n "$2" ]; then
         PKG="$2"
     else
         PKG="$1"
     fi
     
-    # If both positions are empty, throw the error
     if [ -z "$PKG" ] || [ "$PKG" = "s" ]; then
         echo "❌ E: You must specify a package to search for."
         echo "Usage: ./bin s <package_name>"
         exit 1
     fi
-
-    echo "Searching for $PKG..."
-    echo
     
     RESULT=$(jq -r --arg query "$PKG" '
       [ .[] | select((.package | test($query; "i")) or (.summary | test($query; "i"))) | "\(.package)/\(.arch) \(.version)\n  \(.summary)" ] | join("\n\n")
     ' packages.json)
 
     if [ -n "$RESULT" ]; then
-        echo -e "$RESULT"
-        echo
-        echo "✅ Match(es) found in local index."
+        printf "%s\n" "$RESULT"
     else
         echo "❌ E: Unable to locate package $PKG"
     fi
     ;;
-
-
-
 
 
 
