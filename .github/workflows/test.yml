@@ -1,0 +1,14 @@
+name: Tests
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: default user
+        run: |
+          export PATH=~/bin:$PATH
+          echo $PATH
+          ./build_all.sh

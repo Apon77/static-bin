@@ -1,5 +1,6 @@
 #!/bin/sh
-apk add curl
+#apt install --no-install-recommends curl ca-certificates
+
 mkdir -p ~/bin/apps
 curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh -s -- -d ~/bin/apps/zsh-bin -e no
 cd ~/bin
