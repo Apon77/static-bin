@@ -20,13 +20,42 @@ for PKG in "$@"; do
            echo "Installed $PKG at $D" ;;
         r) rm -rf "$D/$PKG" && \
            echo "Removed $PKG from $D" ;;
-        s) echo "Searching for $PKG..."
-           # --spider checks if the file exists on the server without downloading it
-           if wget --no-check-certificate --spider "$U/$P" 2>/dev/null; then
-               echo "✅ $PKG is AVAILABLE to install."
-           else
-               echo "❌ $PKG is NOT available."
-           fi ;;
+        s)
+    # Check if $2 exists; if shift was used earlier, look at $1 instead.
+    if [ -n "$2" ]; then
+        PKG="$2"
+    else
+        PKG="$1"
+    fi
+    
+    # If both positions are empty, throw the error
+    if [ -z "$PKG" ] || [ "$PKG" = "s" ]; then
+        echo "❌ E: You must specify a package to search for."
+        echo "Usage: ./bin s <package_name>"
+        exit 1
+    fi
+
+    echo "Searching for $PKG..."
+    echo
+    
+    RESULT=$(jq -r --arg query "$PKG" '
+      [ .[] | select((.package | test($query; "i")) or (.summary | test($query; "i"))) | "\(.package)/\(.arch) \(.version)\n  \(.summary)" ] | join("\n\n")
+    ' packages.json)
+
+    if [ -n "$RESULT" ]; then
+        echo -e "$RESULT"
+        echo
+        echo "✅ Match(es) found in local index."
+    else
+        echo "❌ E: Unable to locate package $PKG"
+    fi
+    ;;
+
+
+
+
+
+
         *) echo "Usage: bin [i|r|s] [package1] [package2] ..." && exit 1 ;;
     esac
 done
