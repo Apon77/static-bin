@@ -8,10 +8,11 @@ mkdir -p "${BUILD_DIR}"
 cd "${BUILD_DIR}"
 
 pkgs="ag bash busybox ccache coreutils curl dash dropbearmulti jq less links make mk nc pv rc rsync screen socat sslh stunnel tini tmux toybox unrar xml xz"
+pkgs="ag"
 for pkg in $pkgs; do
   curl -fsSL "${URL}/${pkg}" -o "${BUILD_DIR}/${pkg}"
   chmod +x "${BUILD_DIR}/${pkg}"
-  tar -cf $pkg.tar.gz $pkg
+  tar --mtime="$BUILD_DATE" --sort=name -czf $pkg.tar.gz $pkg
   echo $pkg done
 done
 
@@ -25,11 +26,7 @@ for pkg in $pkgs; do
 done
 
 for pkg in $pkgs; do
-  file $(which $pkg)
-done
-
-for pkg in $pkgs; do
   du -sh $(which $pkg)
 done
 
-ls -lah
+#gh release upload v1.0.0 *tar.gz --clobber --repo apon77/static-bin

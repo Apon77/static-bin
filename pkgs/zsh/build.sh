@@ -1,17 +1,24 @@
 #!/bin/sh
+BUILD_DIR="$HOME/bin"
+APP_DIR=$BUILD_DIR/apps
+pkg="zsh"
+mkdir -p "${BUILD_DIR}" $APP_DIR
 
-mkdir -p ~/bin/apps
-curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh -s -- -d ~/bin/apps/zsh-bin -e no
-cd ~/bin
+curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh -s -- -d $APP_DIR/zsh-bin -e no
+cd $BUILD_DIR
 ln -sf apps/zsh-bin/bin/zsh zsh
-tar -cf zsh.tar.gz apps zsh 
-zsh --version
-ldd $(which zsh)
-file $(which zsh)
+tar --mtime="$BUILD_DATE" --sort=name -czf $pkg.tar.gz $pkg apps
+echo $pkg done
 
-ldd apps/zsh-bin/bin/zsh
-file apps/zsh-bin/bin/zsh
+echo $pkg version
+$pkg --version
 
-#rm -rf apps zsh
+echo $(which $pkg); ldd $(which $pkg)
+
+echo $APP_DIR/zsh-bin/bin/zsh; ldd $APP_DIR/zsh-bin/bin/zsh
+file $APP_DIR/zsh-bin/bin/zsh
+
+du -sh $(which $pkg)
+du -sh $APP_DIR/zsh-bin
 
 #./apps/zsh-bin/share/zsh/5.8/scripts/relocate on bin i zsh
